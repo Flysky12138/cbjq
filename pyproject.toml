@@ -1,0 +1,16 @@
+[project]
+name = "cbjq"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "keyboard>=0.13.5",
+    "opencv-python>=4.11.0.86",
+    "pyautogui>=0.9.54",
+    "pydirectinput>=1.0.4",
+    "pygetwindow>=0.0.9",
+]
+
+[tool.ruff]
+line-length = 160
