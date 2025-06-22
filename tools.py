@@ -1,13 +1,14 @@
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from functools import wraps
-import threading
+from typing import Any, Dict, Optional, Tuple
+
 import cv2
+import mss
 import numpy as np
 import pygetwindow as gw
-import mss
-from PIL import Image
-from typing import Any, Dict, Optional, Tuple
 from cv2.typing import MatLike
+from PIL import Image
 
 
 def get_window_rect(title: str) -> Dict[str, int]:

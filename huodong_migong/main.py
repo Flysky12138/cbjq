@@ -1,15 +1,14 @@
 import os
 import sys
 import time
+
 import keyboard
 import pyautogui
 import pygetwindow as gw
 
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from tools import Match, get_window_rect
-
 
 GAME_WINDOW_TITLE = "尘白禁区"
 HOTKEY_TOGGLE = "F2"
