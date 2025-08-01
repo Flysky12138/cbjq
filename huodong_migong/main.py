@@ -8,7 +8,7 @@ import pygetwindow as gw
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from tools import Match, get_window_rect
+from tools import Match, get_window_rect, get_window_screenshot_mss
 
 GAME_WINDOW_TITLE = "尘白禁区"
 HOTKEY_TOGGLE = "F2"
@@ -52,7 +52,7 @@ def drop_ok(point):
     override_click(point)
 
 
-@match.template_path("./assets/level.png", (400, 0, 0, 2700))
+@match.template_path("./assets/level.png", margin=(400, 0, 0, 2700))
 def level(point):
     override_click(point)
 
@@ -67,7 +67,7 @@ def end(point):
     override_click(point)
 
 
-@match.template_path("./assets/attack.png", (1800, 0, 0, 3000))
+@match.template_path("./assets/attack.png", margin=(1800, 0, 0, 3000))
 def attack(point):
     pyautogui.press("e")
     pyautogui.sleep(2)
@@ -79,7 +79,7 @@ def main():
             if gw.getActiveWindowTitle() != GAME_WINDOW_TITLE:
                 time.sleep(0.5)
                 continue
-            match.thread_run(len(match.templates))
+            match.thread_run(get_window_screenshot_mss(), len(match.templates))
         time.sleep(0.1)
 
 

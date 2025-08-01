@@ -76,25 +76,31 @@ class Match:
 
         return decorator
 
-    def thread_run(self, max_workers: int = 4):
+    def thread_run(self, screenshot: Optional[Image.Image] = None, max_workers: int = 4):
         """多线程执行图片匹配"""
-        executor = ThreadPoolExecutor(max_workers)
+        # 如果没有传递截图，获取窗口截图
+        screenshot = screenshot or get_window_screenshot_mss()
+
+        # 用一个锁来保证线程安全
         lock = threading.Lock()
-        screenshot = get_window_screenshot_mss()
 
-        futures = {
-            executor.submit(match_templates, crop_screenshot(screenshot, self.margin.get(path)), template): path for path, template in self.templates.items()
-        }
+        # 提交任务
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = {
+                executor.submit(match_templates, crop_screenshot(screenshot, self.margin.get(path)), template): path
+                for path, template in self.templates.items()
+            }
 
-        for future in as_completed(futures):
-            result = future.result()
-            if result:
-                with lock:
+            for future in as_completed(futures):
+                result = future.result()
+                if result:
                     path = futures[future]
                     margin = self.margin.get(path)
                     x, y = result
                     if margin:
-                        x += margin[3]
-                        y += margin[0]
-                    self.events[path]((x, y))  # 调用事件函数，传入匹配到的坐标
-                break
+                        x += margin[3]  # 左边距
+                        y += margin[0]  # 上边距
+                    # 调用事件函数
+                    with lock:
+                        self.events[path]((x, y))
+                    break
